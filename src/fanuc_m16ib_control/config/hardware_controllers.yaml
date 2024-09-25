@@ -1,0 +1,42 @@
+#tcontroller manager links controllers (defined below) to hardware defined in urdf model
+
+controller_manager:
+  ros__parameters:
+    update_rate: 50  # Hz update rate for the control loop
+
+    #take the joint state information provided by the joint state publisher and broadcasting it on /joint_states topic
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster 
+
+    #passes command signal to every joint (controls all joints dependent to each of them) --> used by moveit
+    joint_trajectory_controller:      
+      type: joint_trajectory_controller/JointTrajectoryController
+
+
+#this connects the controllers to Interfaces by calling the resource manager internally
+
+joint_trajectory_controller:
+  ros__parameters:
+    joints:               # have to match the definitions from the urdf WITH prefix
+      - "fanuc_m16ib_joint1"
+      - "fanuc_m16ib_joint2"
+      - "fanuc_m16ib_joint3"
+      - "fanuc_m16ib_joint4"
+      - "fanuc_m16ib_joint5"
+      - "fanuc_m16ib_joint6"
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0 # in Hz, monitor changes on: control_msgs::action::FollowJointTrajectory -> interface between hardware interface and moveit (FollowJointTrajectory action node)
+    allow_partial_joints_goal: false
+    open_loop_control: false
+    #by setting open_loop to true the state interfaces will be ignored and the last message on joint_trajectory command topic choosen as current hardware state instead, we provide feedback over the state interface!
+    allow_integration_in_goal_trajectories: true
+
+    constraints:
+      stopped_velocity_tolerance: 0.01 # tolerance for deviation in stopping velocity between the axis
+      goal_time: 0.0 #tolerance for not reaching the end of the trajectory in a predefined time (0.0 = not checked!)

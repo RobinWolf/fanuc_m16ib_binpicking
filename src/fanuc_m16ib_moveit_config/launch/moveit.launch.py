@@ -201,7 +201,7 @@ def generate_launch_description():
     
     tf_prefix_arg = DeclareLaunchArgument(
             "tf_prefix",
-            default_value="fanuc_m16ib_"
+            default_value=""
         )
 
     use_mock_hardware_arg = DeclareLaunchArgument(

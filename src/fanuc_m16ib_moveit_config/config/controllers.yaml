@@ -5,7 +5,7 @@ joint_trajectory_controller:
   action_ns: follow_joint_trajectory  #define some properties for the connection between hardware interface and moveit
   type: FollowJointTrajectory         #connection over a action node FollowJointTrajectory with specified namespace
   default: true
-  joints:
+  joints:         # have to match the definitions from the urdf WITH prefix
     - "fanuc_m16ib_joint1"
     - "fanuc_m16ib_joint2"
     - "fanuc_m16ib_joint3"
