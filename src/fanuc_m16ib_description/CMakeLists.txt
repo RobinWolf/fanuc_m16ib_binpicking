@@ -29,6 +29,7 @@ endif()
 
 # add custom directories to install them while buildung
 install(DIRECTORY
+  config
   launch
   rviz
   urdf

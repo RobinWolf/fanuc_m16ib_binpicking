@@ -35,25 +35,29 @@ def generate_launch_description():
 
     tf_prefix = LaunchConfiguration("tf_prefix")
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
+    generate_ros2_control_tag = LaunchConfiguration("generate_ros2_control_tag")
 
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([FindPackageShare(description_package), "urdf", "fanuc_m16ib_description.urdf.xacro"]),
+            PathJoinSubstitution([FindPackageShare(description_package), "urdf", "fanuc_m16ib_model.urdf.xacro"]),
             " ",
             "tf_prefix:=",
             tf_prefix,
             " ",
             "use_mock_hardware:=",
             use_mock_hardware,
+            " ",
+            "generate_ros2_control_tag:=",
+            generate_ros2_control_tag,
         ]
     )
 
     #convert robot_description_content to string, thet it can be passed as yaml to the robot_state_publisher Node --> unsafe without !
     robot_description = {"robot_description": ParameterValue(robot_description_content, value_type=str)} 
     
-    #rviz_config_file = PathJoinSubstitution([FindPackageShare(description_package), "rviz", "rviz_config.rviz"]) # define path to rviz-config file
+    rviz_config_file = PathJoinSubstitution([FindPackageShare(description_package), "rviz", "rviz_config.rviz"]) # define path to rviz-config file
 
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
@@ -72,7 +76,7 @@ def generate_launch_description():
         executable="rviz2",
         name="rviz2",
         output="log",
-        #arguments=["-d", rviz_config_file]
+        arguments=["-d", rviz_config_file]
     )
 
     nodes_to_start = [

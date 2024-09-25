@@ -17,7 +17,7 @@
    <!-- set parameters defined in fanuc_m16ib_macro.urdf -->
     <xacro:arg name="tf_prefix" default=""/>
     <xacro:arg name="use_fake_hardware" default="false" />
-    <xacro:arg name="generate_ros2_control_tag" default_"false"/>
+    <xacro:arg name="generate_ros2_control_tag" default="false"/>
 
 
     <!-- ros2_control related parameters -->
@@ -35,15 +35,16 @@
    <!-- create link fixed to the "world" -->
     <link name="world" />
 
-    <xacro:diy_robotarm
+    <xacro:fanuc_m16ib
         name="$(arg name)"
         tf_prefix="$(arg tf_prefix)"
         parent="world"
         use_fake_hardware="$(arg use_fake_hardware)"
+        generate_ros2_control_tag="$(arg generate_ros2_control_tag)"
         initial_positions="${xacro.load_yaml(initial_positions_file)}"
         >
         <origin xyz="0 0 0" rpy="0 0 0" />          <!-- position robot in the world -->
-    </xacro:diy_robotarm>
+    </xacro:fanuc_m16ib>
 
 
 </robot>

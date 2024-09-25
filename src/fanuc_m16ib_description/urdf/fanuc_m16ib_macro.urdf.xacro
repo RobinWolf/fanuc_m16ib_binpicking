@@ -11,7 +11,7 @@
 <!--set some parameters with default values used by the macros (kinematics description, simulation and control)-->
 <!--#######################################################################################################################################-->
 
-  <xacro:macro name="diy_robotarm" params="
+  <xacro:macro name="fanuc_m16ib" params="
     name
     tf_prefix
     parent
@@ -82,14 +82,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_1.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}yellow"/>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy = "0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_1.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}red"/>
       </collision>
@@ -109,14 +109,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_2.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}yellow"/>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy = "0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_2.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}red"/>
       </collision>
@@ -136,14 +136,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_3.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link3.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}yellow"/>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy = "0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_3.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link3.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}red"/>
       </collision>
@@ -163,14 +163,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_4.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link4.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}yellow"/>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy = "0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_4.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link4.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}red"/>
       </collision>
@@ -190,14 +190,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_5.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link5.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}yellow"/>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy = "0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_5.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link5.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}red"/>
       </collision>
@@ -217,14 +217,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_6.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link6.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}grey"/>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy = "0 0 0"/>
         <geometry>
-          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_6.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link6.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}red"/>
       </collision>
