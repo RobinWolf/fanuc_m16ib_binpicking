@@ -70,11 +70,11 @@
 
     <!-- Joint 1 -->
     <joint name="${tf_prefix}joint1" type="revolute">
-        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <origin xyz="0 0 0.245" rpy="0 0 0"/> 
         <parent link="${tf_prefix}base_link"/>
         <child link="${tf_prefix}link_1"/>
         <axis xyz="0.0 0.0 1.0"/>
-        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+        <limit lower="-2.697" upper="2.697" velocity="2.88" effort="1000"/> 
     </joint>
 
     <!-- Link1 -->
@@ -97,11 +97,11 @@
 
     <!-- Joint 2 -->
     <joint name="${tf_prefix}joint2" type="revolute">
-        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <origin xyz="-0.143 0.15 0.28" rpy="1.5707 0 -1.5707"/> 
         <parent link="${tf_prefix}link_1"/>
         <child link="${tf_prefix}link_2"/>
         <axis xyz="0.0 0.0 1.0"/>
-        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+        <limit lower="-1.5707" upper="2.9725" velocity="2.88" effort="1000"/> 
     </joint>
 
     <!-- Link2 -->
@@ -124,11 +124,11 @@
 
     <!-- Joint 3 -->
     <joint name="${tf_prefix}joint3" type="revolute">
-        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <origin xyz="0 0.770 0.0189" rpy="0 3.1415 0"/> 
         <parent link="${tf_prefix}link_2"/>
         <child link="${tf_prefix}link_3"/>
         <axis xyz="0.0 0.0 1.0"/>
-        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+        <limit lower="-2.967" upper="5.061" velocity="3.05" effort="1000"/> 
     </joint>
 
     <!-- Link3 -->
@@ -150,12 +150,12 @@
     </link>
 
     <!-- Joint 4 -->
-    <joint name="${tf_prefix}wrist_1" type="revolute">
-        <origin xyz="0 0 0" rpy="0 0 0"/> 
+    <joint name="${tf_prefix}joint4" type="revolute">
+        <origin xyz="0.184575 0.099755 0.163294" rpy="0 -1.5707 0"/> 
         <parent link="${tf_prefix}link_3"/>
         <child link="${tf_prefix}link_4"/>
         <axis xyz="0.0 0.0 1.0"/>
-        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+        <limit lower="-3.491" upper="3.491" velocity="6.11" effort="1000"/> 
     </joint>
 
     <!-- Link4 -->
@@ -178,11 +178,11 @@
 
     <!-- Joint 5 -->
     <joint name="${tf_prefix}joint5" type="revolute">
-        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <origin xyz="-0.04679 0 -0.55593" rpy="0 1.5707 0"/> 
         <parent link="${tf_prefix}link_4"/>
         <child link="${tf_prefix}link_5"/>
         <axis xyz="0.0 0.0 1.0"/>
-        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+        <limit lower="-2.443" upper="2.443" velocity="5.93" effort="1000"/> 
     </joint>
 
     <!-- Link5 -->
@@ -205,11 +205,11 @@
 
     <!-- Joint 6 -->
     <joint name="${tf_prefix}joint6" type="revolute">
-        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <origin xyz="0.080645 0 0.044376" rpy="0 1.5707 0"/> 
         <parent link="${tf_prefix}link_5"/>
         <child link="${tf_prefix}link_6"/>
         <axis xyz="0.0 0.0 1.0"/>
-        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+        <limit lower="-7.854" upper="7.854" velocity="9.08" effort="1000"/> 
     </joint>
 
     <!-- Link6 = Flange -->
@@ -229,6 +229,17 @@
         <material name="${tf_prefix}red"/>
       </collision>
     </link>
+
+        <!-- Joint to Tool0/ Flange -->
+        <joint name="${tf_prefix}to_tool0" type="fixed">
+          <origin xyz="0 0 0.0196" rpy="0 0 0"/> 
+          <parent link="${tf_prefix}link_6"/>
+          <child link="${tf_prefix}tool0"/>
+      </joint>
+  
+      <!-- tool0 -->
+      <link name="${tf_prefix}tool0"/>
+ 
   
   </xacro:macro>
 </robot>
