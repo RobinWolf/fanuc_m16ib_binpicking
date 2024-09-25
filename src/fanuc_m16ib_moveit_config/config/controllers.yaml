@@ -1,0 +1,14 @@
+controller_names:
+  - joint_trajectory_controller #moveit trys to connect to this controller defined inside the driver package (hardware interface side)
+
+joint_trajectory_controller:
+  action_ns: follow_joint_trajectory  #define some properties for the connection between hardware interface and moveit
+  type: FollowJointTrajectory         #connection over a action node FollowJointTrajectory with specified namespace
+  default: true
+  joints:
+    - "fanuc_m16ib_joint1"
+    - "fanuc_m16ib_joint2"
+    - "fanuc_m16ib_joint3"
+    - "fanuc_m16ib_joint4"
+    - "fanuc_m16ib_joint5"
+    - "fanuc_m16ib_joint6"
