@@ -37,6 +37,7 @@ def opaque_test(context, *args, **kwargs):
     generate_ros2_control_tag = LaunchConfiguration("generate_ros2_control_tag")
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
 
+
     moveit_package = "fanuc_m16ib_moveit_config"
     description_package = "fanuc_m16ib_description"
     
