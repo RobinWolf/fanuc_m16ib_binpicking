@@ -36,13 +36,10 @@ def opaque_test(context, *args, **kwargs):
     tf_prefix = LaunchConfiguration("tf_prefix")
     generate_ros2_control_tag = LaunchConfiguration("generate_ros2_control_tag")
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
-    launch_rviz  = LaunchConfiguration("launch_rviz")
-
 
     moveit_package = "fanuc_m16ib_moveit_config"
     description_package = "fanuc_m16ib_description"
     
-
 
     robot_description_file = PathJoinSubstitution(
         [
@@ -188,24 +185,11 @@ def opaque_test(context, *args, **kwargs):
         parameters=[robot_description, robot_description_semantic, robot_description_kinematics_file, planning_group],
     )
 
-    # rviz with moveit configuration
-    #rviz_config_file = PathJoinSubstitution([FindPackageShare(moveit_package), "rviz", "rviz_config.rviz"]) # define path to rviz-config file
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        condition= IfCondition(launch_rviz),
-        parameters=[
-            robot_description_kinematics_file,  # needed for interactive marker on the tcp
-        ],
-        #arguments=["-d", rviz_config_file],
-    )
 
     # nodes to start
     return [
         move_group_node,
         moveit_wrapper_node,
-        rviz_node,
     ]
 
 
@@ -232,20 +216,12 @@ def generate_launch_description():
             description="enable ros2 control for hardware interface (realtime control, mock, simulated or real hardware)",
         )
 
-    launch_rviz_arg = DeclareLaunchArgument(
-            "launch_rviz",
-            default_value="true",
-            choices=["false", "true"],
-            description="Whether to start rviz with the launch file or not",
-        )
-
 
     ld = LaunchDescription()
 
     ld.add_action(use_mock_hardware_arg)
     ld.add_action(tf_prefix_arg)
     ld.add_action(generate_ros2_control_tag_arg)
-    ld.add_action(launch_rviz_arg)
 
     ld.add_action(OpaqueFunction(function=opaque_test))
 
