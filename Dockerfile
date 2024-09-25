@@ -2,7 +2,12 @@
 ##                           1. stage: Base Image                           ##
 ##############################################################################
 ARG ROS_DISTRO=humble
-FROM osrf/ros:$ROS_DISTRO-desktop as base
+
+# AMD64 Hardware
+#FROM osrf/ros:$ROS_DISTRO-desktop as base
+
+# ARM64 Hardware
+FROM arm64v8/ros:$ROS_DISTRO AS base
 
 # Configure DDS
 COPY dds_profile.xml /opt/misc/dds_profile.xml
@@ -18,8 +23,10 @@ RUN groupadd -g $GID $USER \
 
 #install xacro and joint state publisher gui package (additional necessarity when not using the ur-package from ros)
 USER root
-RUN apt-get update && apt-get install -y ros-humble-xacro
-RUN apt-get update && apt-get install -y ros-humble-joint-state-publisher-gui
+RUN apt-get update && apt-get install -y \
+    ros-${ROS_DISTRO}-xacro \
+    ros-${ROS_DISTRO}-joint-state-publisher-gui \
+    ros-${ROS_DISTRO}-rviz2
 USER ${USER}
 
 # Setup workpace
