@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<!--
+Copied from ROS1 example:
+https://github.com/ros-simulation/gazebo_ros_demos/blob/kinetic-devel/rrbot_description/urdf/materials.xacro
+-->
+
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="materials" params="tf_prefix">
+
+    <material name="${tf_prefix}black">
+      <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="${tf_prefix}blue">
+      <color rgba="0.0 0.0 0.8 1.0"/>
+    </material>
+
+    <material name="${tf_prefix}green">
+      <color rgba="0.0 0.8 0.0 1.0"/>
+    </material>
+
+    <material name="${tf_prefix}yellow">
+      <color rgba="1.0 1.0 0.0 1.0"/>
+    </material>
+
+    <material name="${tf_prefix}grey">
+      <color rgba="0.6 0.6 0.6 1.0"/>
+    </material>
+
+    <material name="${tf_prefix}orange">
+      <color rgba="${255/255} ${108/255} ${10/255} 1.0"/>
+    </material>
+
+    <material name="${tf_prefix}brown">
+      <color rgba="${222/255} ${207/255} ${195/255} 1.0"/>
+    </material>
+
+    <material name="${tf_prefix}red">
+      <color rgba="0.8 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="${tf_prefix}white">
+      <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+  </xacro:macro>
+
+</robot>

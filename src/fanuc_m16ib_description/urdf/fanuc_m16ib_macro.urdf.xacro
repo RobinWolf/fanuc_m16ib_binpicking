@@ -1,0 +1,234 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!--#######################################################################################################################################-->
+<!--include the helpers with fixed parameters-->
+<!--#######################################################################################################################################-->
+  <xacro:include filename="$(find fanuc_m16ib_description)/urdf/materials.urdf.xacro" />
+
+
+<!--#######################################################################################################################################-->
+<!--set some parameters with default values used by the macros (kinematics description, simulation and control)-->
+<!--#######################################################################################################################################-->
+
+  <xacro:macro name="diy_robotarm" params="
+    name
+    tf_prefix
+    parent
+    *origin
+    generate_ros2_control_tag
+    use_fake_hardware
+    initial_positions:=${dict(joint1=0.0,joint2=0.0,joint3=0.0,joint4=0.0,joint5=0.0,joint6=0.0)}"
+  >
+
+
+<!--#######################################################################################################################################-->
+<!--include ros2 control and create an instance if param generate_ros2_control_tag == true and pass necessary params-->
+<!--#######################################################################################################################################-->
+
+    <xacro:if value="${generate_ros2_control_tag}">
+        <!-- ros2 control include -->
+        <xacro:include filename="$(find fanuc_m16ib_description)/urdf/fanuc_m16ib.ros2_control.urdf.xacro" />
+        <!-- ros2 control instance -->
+        <xacro:fanuc_m16ib_ros2_control
+          name="${name}"
+          use_fake_hardware="${use_fake_hardware}"
+          tf_prefix="${tf_prefix}"
+          initial_positions="${initial_positions"
+        />
+    </xacro:if>
+
+
+<!--#######################################################################################################################################-->
+<!--define the main kinematic chain with links and joints -->
+<!--#######################################################################################################################################-->
+    <xacro:materials tf_prefix="${tf_prefix}"/>
+
+    <!-- Joint 0 fix Base to parent passed in the main_urdf.xacro-->
+    <joint name="${tf_prefix}robotarm_to_parent" type="fixed">
+        <parent link="${parent}"/>
+        <child link="${tf_prefix}base_link"/>
+    </joint>
+
+    <!-- Link0 = Base -->
+    <link name="${tf_prefix}base_link">
+      <origin xyz="0 0 0"/>
+      <visual>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/base.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/base.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}red"/>
+      </collision>
+    </link>
+
+    <!-- Joint 1 -->
+    <joint name="${tf_prefix}joint1" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <parent link="${tf_prefix}base_link"/>
+        <child link="${tf_prefix}link_1"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+    </joint>
+
+    <!-- Link1 -->
+    <link name="${tf_prefix}link_1">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy = "0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}red"/>
+      </collision>
+    </link>
+
+    <!-- Joint 2 -->
+    <joint name="${tf_prefix}joint2" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <parent link="${tf_prefix}link_1"/>
+        <child link="${tf_prefix}link_2"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+    </joint>
+
+    <!-- Link2 -->
+    <link name="${tf_prefix}link_2">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_2.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy = "0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_2.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}red"/>
+      </collision>
+    </link>
+
+    <!-- Joint 3 -->
+    <joint name="${tf_prefix}joint3" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <parent link="${tf_prefix}link_2"/>
+        <child link="${tf_prefix}link_3"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+    </joint>
+
+    <!-- Link3 -->
+    <link name="${tf_prefix}link_3">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_3.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy = "0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_3.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}red"/>
+      </collision>
+    </link>
+
+    <!-- Joint 4 -->
+    <joint name="${tf_prefix}wrist_1" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <parent link="${tf_prefix}link_3"/>
+        <child link="${tf_prefix}link_4"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+    </joint>
+
+    <!-- Link4 -->
+    <link name="${tf_prefix}link_4">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_4.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy = "0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_4.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}red"/>
+      </collision>
+    </link>
+
+    <!-- Joint 5 -->
+    <joint name="${tf_prefix}joint5" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <parent link="${tf_prefix}link_4"/>
+        <child link="${tf_prefix}link_5"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+    </joint>
+
+    <!-- Link5 -->
+    <link name="${tf_prefix}link_5">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_5.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy = "0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_5.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}red"/>
+      </collision>
+    </link>
+
+    <!-- Joint 6 -->
+    <joint name="${tf_prefix}joint6" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <parent link="${tf_prefix}link_5"/>
+        <child link="${tf_prefix}link_6"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="0" upper="0" velocity="0" effort="0"/> 
+    </joint>
+
+    <!-- Link6 = Flange -->
+    <link name="${tf_prefix}link_6">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/visual/link_6.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy = "0 0 0"/>
+        <geometry>
+          <mesh filename="package://fanuc_m16ib_description/meshes/collision/link_6.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="${tf_prefix}red"/>
+      </collision>
+    </link>
+  
+  </xacro:macro>
+</robot>

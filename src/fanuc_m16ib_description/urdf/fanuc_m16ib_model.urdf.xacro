@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<!--this is the main urdf.xacro file which builds actually the robot model by calling the other macros-->
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="fanuc_m16ib">
+   <!-- set robot name parameter -->
+    <xacro:arg name="name" default="fanuc_m16ib"/>
+
+<!--#######################################################################################################################################-->
+   <!-- import main macro -->
+<!--#######################################################################################################################################-->
+    <xacro:include filename="$(find fanuc_m16ib_description)/urdf/fanuc_m16ib_macro.urdf.xacro"/>
+
+
+<!--#######################################################################################################################################-->
+    <!-- set ros2 parameters, which will passsed to the macros-->
+<!--#######################################################################################################################################-->
+   <!-- set parameters defined in fanuc_m16ib_macro.urdf -->
+    <xacro:arg name="tf_prefix" default=""/>
+    <xacro:arg name="use_fake_hardware" default="false" />
+    <xacro:arg name="generate_ros2_control_tag" default_"false"/>
+
+
+    <!-- ros2_control related parameters -->
+    <!-- TODO -->
+
+
+    <!-- initial position for simulations from .yaml files (Fake Hardware, Gazebo) -->
+    <xacro:arg name="initial_positions_file" default="$(find fanuc_m16ib_description)/config/initial_positions.yaml"/>
+    <xacro:property name="initial_positions_file" default="$(arg initial_positions_file)"/>
+
+
+<!--#######################################################################################################################################-->
+   <!-- call the main macro by passing parameters to build the arm -->
+<!--#######################################################################################################################################-->
+   <!-- create link fixed to the "world" -->
+    <link name="world" />
+
+    <xacro:diy_robotarm
+        name="$(arg name)"
+        tf_prefix="$(arg tf_prefix)"
+        parent="world"
+        use_fake_hardware="$(arg use_fake_hardware)"
+        initial_positions="${xacro.load_yaml(initial_positions_file)}"
+        >
+        <origin xyz="0 0 0" rpy="0 0 0" />          <!-- position robot in the world -->
+    </xacro:diy_robotarm>
+
+
+</robot>
