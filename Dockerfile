@@ -67,7 +67,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 USER $USER
 
 
-#install dependencies to calculate with affine transformations and use track-ik
+#install dependencies to calculate with affine transformations, use track-ik and python interface
 USER root
 RUN DEBIAN_FRONTEND=noninteractive \
     apt update && apt install -y  \
@@ -78,17 +78,9 @@ RUN apt-get update && apt-get install -y libnlopt*
 
 RUN pip install transforms3d
 RUN pip install scipy
+RUN pip install numpy==1.23.5
 USER $USER
 
-
-#install dependencies for python interface
-USER root
-RUN apt-get update && apt-get install -y pip
-    # to show usb devices with lsusb
-RUN apt-get update && apt-get install -y usbutils  
-    # to configure the CAN interface
-RUN apt-get update && apt-get install -y iproute2
-USER $USER 
 
 
 # Copy src into src folder to build the workspace initially --> mounting overwrites this
@@ -104,6 +96,7 @@ USER root
 RUN sed -i 's|exec "\$@"|source "/home/'"${USER}"'/ros2_ws/install/setup.bash"\n&|' /ros_entrypoint.sh
 USER $USER
 
+CMD ["/bin/bash"]
 
 
 
