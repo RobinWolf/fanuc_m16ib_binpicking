@@ -58,8 +58,8 @@ namespace moveit_wrapper
         // set goal planning time
         _move_group->setPlanningTime(1.0);
 
-        // set refernce frame for planning to ur_base_link
-        _move_group->setPoseReferenceFrame("igus_base_link");
+        // set refernce frame for planning
+        _move_group->setPoseReferenceFrame("world");
 
 
         _i_move_group_initialized = true;
@@ -97,7 +97,7 @@ namespace moveit_wrapper
             _move_group->setStartStateToCurrentState();
 
             // set planning reference frame according to out robot system
-            _move_group->setPoseReferenceFrame("igus_base_link");
+            _move_group->setPoseReferenceFrame("world");
 
             //https://github.com/moveit/moveit2/blob/main/moveit_ros/visualization/motion_planning_rviz_plugin/src/motion_planning_frame_planning.cpp
 
@@ -153,7 +153,7 @@ namespace moveit_wrapper
             _move_group->setStartStateToCurrentState();
                     
             // set planning reference frame according to out robot system
-            _move_group->setPoseReferenceFrame("igus_base_link");
+            _move_group->setPoseReferenceFrame("world");
 
             _move_group->setPoseTarget(request->pose);
             
