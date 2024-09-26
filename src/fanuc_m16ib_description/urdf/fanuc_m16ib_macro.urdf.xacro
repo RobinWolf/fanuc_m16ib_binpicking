@@ -122,10 +122,23 @@
       </collision>
     </link>
 
-    <!-- Joint 3 -->
-    <joint name="${tf_prefix}joint3" type="revolute">
+    <!-- Joint 2_mimic -->
+    <joint name="${tf_prefix}joint2_mimic" type="revolute">
+        <mimic joint="${tf_prefix}joint2" multiplier="1" offset="0"/>
         <origin xyz="0 0.770 0.0189" rpy="0 3.1415 0"/> 
         <parent link="${tf_prefix}link_2"/>
+        <child link="${tf_prefix}link_2_mimic"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="-1.5707" upper="2.9725" velocity="2.88" effort="1000"/> 
+    </joint>
+
+    <!-- Link2_mimic -->
+    <link name="${tf_prefix}link_2_mimic"/>  
+
+    <!-- Joint 3 -->
+    <joint name="${tf_prefix}joint3" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0"/> 
+        <parent link="${tf_prefix}link_2_mimic"/>
         <child link="${tf_prefix}link_3"/>
         <axis xyz="0.0 0.0 1.0"/>
         <limit lower="-2.967" upper="5.061" velocity="3.05" effort="1000"/> 
