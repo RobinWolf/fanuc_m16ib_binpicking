@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="fanuc_m16ib_srdf_macro" params="tf_prefix name">
+    <!--GROUPS - Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <group name="${name}">
+      <chain base_link="${tf_prefix}base_link" tip_link="${tf_prefix}tool0" />
+    </group>
+
+    <!--DISABLE COLLISIONS -->
+    <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}link_1" reason="Adjacent" />
+    <disable_collisions link1="${tf_prefix}link_1" link2="${tf_prefix}link_2" reason="Adjacent" />
+    <disable_collisions link1="${tf_prefix}link_2" link2="${tf_prefix}link_3" reason="Adjacent" />
+    <disable_collisions link1="${tf_prefix}link_3" link2="${tf_prefix}link_4" reason="Adjacent" />
+    <disable_collisions link1="${tf_prefix}link_4" link2="${tf_prefix}link_5" reason="Adjacent" />
+    <disable_collisions link1="${tf_prefix}link_5" link2="${tf_prefix}link_6" reason="Adjacent" />
+
+    <!-- default configurations -->
+    <group_state name="home" group="${name}">
+        <joint name="$(arg tf_prefix)joint1" value="0"/>
+        <joint name="$(arg tf_prefix)joint2" value="0"/>
+        <joint name="$(arg tf_prefix)joint3" value="0"/>
+        <joint name="$(arg tf_prefix)joint4" value="0"/>
+        <joint name="$(arg tf_prefix)joint5" value="0"/>
+        <joint name="$(arg tf_prefix)joint6" value="0"/>
+    </group_state>
+
+  </xacro:macro>
+</robot>

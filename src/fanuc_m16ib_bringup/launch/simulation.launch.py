@@ -92,7 +92,7 @@ def generate_launch_description():
 
 
     # launch whole rviz node with stored config and motion planning parameters
-    #rviz_config_file = PathJoinSubstitution([FindPackageShare(bringup_package), "rviz", "moveit.rviz"])
+    rviz_config_file = PathJoinSubstitution([FindPackageShare(bringup_package), "rviz", "moveit.rviz"])
     robot_description_kinematics_file = PathJoinSubstitution(   # needed for the interactive markers in rviz
         [
             FindPackageShare(moveit_package),
@@ -105,7 +105,7 @@ def generate_launch_description():
         executable="rviz2",
         name="rviz2",
         output="log",
-        #arguments=["-d", rviz_config_file],
+        arguments=["-d", rviz_config_file],
         parameters=[
             robot_description_kinematics_file,
         ],

@@ -1,5 +1,3 @@
-#tcontroller manager links controllers (defined below) to hardware defined in urdf model
-
 controller_manager:
   ros__parameters:
     update_rate: 50  # Hz update rate for the control loop

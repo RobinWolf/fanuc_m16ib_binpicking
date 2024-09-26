@@ -34,6 +34,7 @@ def load_yaml_internal(package_name, file_path):
 
 def opaque_test(context, *args, **kwargs):
     tf_prefix = LaunchConfiguration("tf_prefix")
+    group_name = LaunchConfiguration("group_name")
     generate_ros2_control_tag = LaunchConfiguration("generate_ros2_control_tag")
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
 
@@ -69,7 +70,7 @@ def opaque_test(context, *args, **kwargs):
         [
             FindPackageShare(moveit_package),
             "srdf",
-            "fanuc_m16ib.srdf.xacro",
+            "fanuc_m16ib_model.srdf.xacro",
         ]
     )
     robot_description_semantic = Command(
@@ -80,6 +81,9 @@ def opaque_test(context, *args, **kwargs):
             " ",
             "tf_prefix:=",
             tf_prefix,
+            " ",
+            "name:=",
+            group_name,
         ]
     )
 
@@ -92,7 +96,7 @@ def opaque_test(context, *args, **kwargs):
         "controllers.yaml",
     )
 
-    controllers_dict = load_yaml(Path(controllers_file.perform(context)))
+    controllers_dict = load_yaml(Path(controllers_file))
 
     moveit_controllers = {
         "moveit_simple_controller_manager": controllers_dict,
@@ -104,7 +108,7 @@ def opaque_test(context, *args, **kwargs):
         [
             FindPackageShare(moveit_package),
             "config",
-            "kinematics.yaml",
+            "kinematics.yaml"
         ]
     )
 
@@ -202,7 +206,12 @@ def generate_launch_description():
     
     tf_prefix_arg = DeclareLaunchArgument(
             "tf_prefix",
-            default_value=""
+            default_value="fanuc_m16ib_"
+        )
+    
+    group_name_arg = DeclareLaunchArgument(
+            "group_name",
+            default_value="fanuc_m16ib"
         )
 
     use_mock_hardware_arg = DeclareLaunchArgument(
@@ -213,7 +222,7 @@ def generate_launch_description():
     
     generate_ros2_control_tag_arg = DeclareLaunchArgument(
             "generate_ros2_control_tag",
-            default_value="false",
+            default_value="true",
             description="enable ros2 control for hardware interface (realtime control, mock, simulated or real hardware)",
         )
 
@@ -223,6 +232,7 @@ def generate_launch_description():
     ld.add_action(use_mock_hardware_arg)
     ld.add_action(tf_prefix_arg)
     ld.add_action(generate_ros2_control_tag_arg)
+    ld.add_action(group_name_arg)
 
     ld.add_action(OpaqueFunction(function=opaque_test))
 

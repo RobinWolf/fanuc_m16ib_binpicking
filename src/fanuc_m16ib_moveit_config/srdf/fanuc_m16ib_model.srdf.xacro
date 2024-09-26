@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="fanuc_m16ib">
+
+  <xacro:arg name="name" default=""/>
+  <xacro:arg name="tf_prefix" default=""/>
+
+  <xacro:include filename="$(find fanuc_m16ib_moveit_config)/srdf/fanuc_m16ib_macro.srdf.xacro"/>
+
+  <xacro:fanuc_m16ib_srdf_macro
+    name="$(arg name)"
+    tf_prefix="$(arg tf_prefix)"
+  >
+  </xacro:fanuc_m16ib_srdf_macro>
+
+</robot>

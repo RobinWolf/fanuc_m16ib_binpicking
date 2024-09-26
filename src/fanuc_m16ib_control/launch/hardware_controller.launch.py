@@ -19,7 +19,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "tf_prefix",
-            default_value='""',
+            default_value='fanuc_m16ib_',
             description="Prefix for the links and joints in the robot cell",
         )
     )
@@ -33,7 +33,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "generate_ros2_control_tag",
-            default_value='false',
+            default_value='true',
             description="enable ros2 control for hardware interface (realtime control, mock, simulated or real hardware)",
         )
     )
@@ -41,7 +41,7 @@ def generate_launch_description():
 
 
     tf_prefix = LaunchConfiguration("tf_prefix")
-    use_fake_hardware = LaunchConfiguration("use_fake_hardware")
+    use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     generate_ros2_control_tag = LaunchConfiguration("generate_ros2_control_tag")
 
 
@@ -56,8 +56,8 @@ def generate_launch_description():
             "tf_prefix:=",
             tf_prefix,
             " ",
-            "use_fake_hardware:=",
-            use_fake_hardware,
+            "use_mock_hardware:=",
+            use_mock_hardware,
             " ",
             "generate_ros2_control_tag:=",
             generate_ros2_control_tag,
@@ -68,41 +68,39 @@ def generate_launch_description():
     robot_description = {"robot_description": ParameterValue(robot_description_content, value_type=str)} 
 
     #load the controller manager yaml
-    robot_controller_config = PathJoinSubstitution([FindPackageShare(control_package), "config", "ros2_controllers.yaml"])
+    robot_controller_config = PathJoinSubstitution([FindPackageShare(control_package), "config", "hardware_controllers.yaml"])
 
 
     # define the nodes to launch 
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[
-            {"robot_description": robot_description},
-            robot_controller_config,]
+        parameters=[robot_description, robot_controller_config],
     )
+    
     robot_state_pub_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         parameters=[robot_description],
     )
 
-    joint_state_broadcaster_node = Node(
+    joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=[
-            "joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["joint_state_broadcaster", "-c", "/controller_manager"],
     )
 
-    joint_trajectory_controller_node = Node(
+    joint_trajectory_controller_spawner = Node(
     package="controller_manager",
     executable="spawner",
-    arguments=["joint_trajectory_controller", "--controller-manager", "/controller_manager"],          
+    arguments=["joint_trajectory_controller", "-c", "/controller_manager"],          
     )
 
     nodes_to_start = [
         control_node,
         robot_state_pub_node,
-        joint_state_broadcaster_node,
-        joint_trajectory_controller_node
+        joint_state_broadcaster_spawner,
+        joint_trajectory_controller_spawner
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)

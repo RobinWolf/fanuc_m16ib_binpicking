@@ -13,21 +13,21 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "tf_prefix",
-            default_value='""',
+            default_value='fanuc_m16ib_',
             description="Prefix for the links and joints in the robot cell, can be used for multi-robot cells",
         )
     )        
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_mock_hardware",
-            default_value='"true"',
+            default_value='true',
             description="start the robot with fake(mock) hardware or real controller",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             "generate_ros2_control_tag",
-            default_value='"false"',
+            default_value='false',
             description="enable ros2 control for hardware interface (realtime control, mock, simulated or real hardware)",
         )
     )

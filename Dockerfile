@@ -67,6 +67,44 @@ RUN DEBIAN_FRONTEND=noninteractive \
 USER $USER
 
 
+#install dependencies to calculate with affine transformations and use track-ik
+USER root
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt update && apt install -y  \
+    ros-${ROS_DISTRO}-tf-transformations
+
+RUN apt-get update && apt-get install -y pip
+RUN apt-get update && apt-get install -y libnlopt*
+
+RUN pip install transforms3d
+RUN pip install scipy
+USER $USER
+
+
+#install dependencies for python interface
+USER root
+RUN apt-get update && apt-get install -y pip
+    # to show usb devices with lsusb
+RUN apt-get update && apt-get install -y usbutils  
+    # to configure the CAN interface
+RUN apt-get update && apt-get install -y iproute2
+USER $USER 
+
+
+# Copy src into src folder to build the workspace initially --> mounting overwrites this
+COPY ./src /home/$USER/ros2_ws/src
+
+# Build the workspace packages
+RUN cd /home/$USER/ros2_ws && \
+     . /opt/ros/$ROS_DISTRO/setup.sh && \
+     colcon build
+
+# Add built package to entrypoint by calling install/setup.bash
+USER root
+RUN sed -i 's|exec "\$@"|source "/home/'"${USER}"'/ros2_ws/install/setup.bash"\n&|' /ros_entrypoint.sh
+USER $USER
+
+
 
 
 

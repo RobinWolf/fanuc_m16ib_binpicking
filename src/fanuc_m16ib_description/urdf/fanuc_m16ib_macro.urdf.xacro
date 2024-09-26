@@ -17,7 +17,7 @@
     parent
     *origin
     generate_ros2_control_tag
-    use_fake_hardware
+    use_mock_hardware
     initial_positions:=${dict(joint1=0.0,joint2=0.0,joint3=0.0,joint4=0.0,joint5=0.0,joint6=0.0)}"
   >
 
@@ -28,13 +28,13 @@
 
     <xacro:if value="${generate_ros2_control_tag}">
         <!-- ros2 control include -->
-        <xacro:include filename="$(find fanuc_m16ib_description)/urdf/fanuc_m16ib.ros2_control.urdf.xacro" />
+        <xacro:include filename="$(find fanuc_m16ib_description)/urdf/fanuc_m16ib_ros2_control.urdf.xacro" />
         <!-- ros2 control instance -->
         <xacro:fanuc_m16ib_ros2_control
           name="${name}"
-          use_fake_hardware="${use_fake_hardware}"
+          use_mock_hardware="${use_mock_hardware}"
           tf_prefix="${tf_prefix}"
-          initial_positions="${initial_positions"
+          initial_positions="${initial_positions}"
         />
     </xacro:if>
 
