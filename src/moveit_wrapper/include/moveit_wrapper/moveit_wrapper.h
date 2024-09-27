@@ -9,6 +9,8 @@
 #include <moveit_wrapper/srv/set_velocity.hpp>
 #include <moveit_wrapper/srv/string.hpp>
 #include <geometry_msgs/msg/pose.hpp>
+#include <moveit_msgs/msg/robot_trajectory.hpp>
+#include <trajectory_msgs/msg/joint_trajectory.hpp>
 #include <stdlib.h>
 
 namespace moveit_wrapper

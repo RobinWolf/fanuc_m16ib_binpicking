@@ -163,6 +163,18 @@ namespace moveit_wrapper
                 planning_success = (_move_group->plan(my_plan) == moveit::core::MoveItErrorCode::SUCCESS);
                 RCLCPP_INFO(rclcpp::get_logger("moveit_wrapper"), "CartesianPTP planning %s", planning_success ? "SUCCEEDED" : "FAILED");
                 if(planning_success) {
+
+                    // Export Trajectory to Postprocess Waypoints for Fanuc
+                    moveit_msgs::msg::RobotTrajectory trajectory_msg = my_plan.trajectory_;
+                    
+                    // Convert RobotTrajectory to JointTrajectory
+                    trajectory_msgs::msg::JointTrajectory joint_trajectory;
+                    joint_trajectory.joint_names = trajectory_msg.joint_trajectory.joint_names; // Copy joint names
+
+                    for (const auto &point : trajectory_msg.joint_trajectory.points) {    //Copy waypoints
+                        joint_trajectory.points.push_back(point);
+                    }
+                    response->trajectory = joint_trajectory;
                     break;
                 }
             }

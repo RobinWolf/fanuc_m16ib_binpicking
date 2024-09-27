@@ -164,8 +164,11 @@ class ARMClient(Node):
         req.pose = affine_to_pose(pose)
         future = ARMClient.send_service_request(req, self.move_ptp_cli)
         response = self.wait_for_service_response(future)
+
+        print("Trajectory: ", len(response.trajectory.points))
+
         if not response.success:
-            self.get_logger().error('Could not move to cartesian position due to detected collisions in ptp path or position is out of the workspace')
+            self.get_logger().error('Could not move to cartesian position due to detected error in ptp path or position is out of the workspace')
         return response.success
 
     # plan in joint_space, move to joint positions directly, but dont plan around obstacles
@@ -183,7 +186,7 @@ class ARMClient(Node):
         future = ARMClient.send_service_request(req, self.move_joint_cli)
         response = self.wait_for_service_response(future)
         if not response.success:
-            self.get_logger().error('Could not move to joint position due to detected collisions')
+            self.get_logger().error('Could not move to joint position due to detected error')
         return response.success
 
     # plan trajectory along cartesian lin path, but dont plan around obstacles
@@ -201,7 +204,7 @@ class ARMClient(Node):
         future = ARMClient.send_service_request(req, self.move_lin_cli)
         response = self.wait_for_service_response(future)
         if not response.success:
-            self.get_logger().error('Could not move to cartesian position due to detected collisions in linear path or position is out of the workspace')
+            self.get_logger().error('Could not move to cartesian position due to detected error in linear path or position is out of the workspace')
         return response.success
 
 

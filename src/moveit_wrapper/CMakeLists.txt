@@ -46,6 +46,8 @@ find_package(control_msgs REQUIRED)
 find_package(moveit_servo REQUIRED)
 find_package(moveit_ros_planning REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(trajectory_msgs REQUIRED)
+find_package(moveit_msgs REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -69,7 +71,7 @@ set(srv_files
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${srv_files}
-  DEPENDENCIES geometry_msgs std_msgs
+  DEPENDENCIES geometry_msgs std_msgs trajectory_msgs
   ADD_LINTER_TESTS
 )
 
