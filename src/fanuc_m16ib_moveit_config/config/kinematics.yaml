@@ -1,31 +1,41 @@
-/**:
-  ros__parameters:
-    robot_description_kinematics:
-      fanuc_m16ib:
-        kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
-        kinematics_solver_search_resolution: 0.005
-        kinematics_solver_timeout: 0.005
-        kinematics_solver_attempts: 3
+### KDL ### (Standard, support for mimic joints, sometimes bad trajectories)
+# /**:
+#   ros__parameters:
+#     robot_description_kinematics:
+#       fanuc_m16ib:
+#         kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+#         kinematics_solver_search_resolution: 0.005
+#         kinematics_solver_timeout: 0.005
+#         kinematics_solver_attempts: 3
 
+
+
+### Trac-IK ### (best, but no support for mimic joints)
+# /**:
+#   ros__parameters:
+#     robot_description_kinematics:
+#       fanuc_m16ib:
         # kinematics_solver: trac_ik_kinematics_plugin/TRAC_IKKinematicsPlugin
-        # position_only_ik: true
         # solve_type: Distance # Speed, Manipulation1, Manipulation2, Distance
         # kinematics_solver_timeout: 0.5 # 0.005
         # kinematics_solver_attempts: 10
         # epsilon: 1e-5
 
 
-  
-#use this configs for standard kdl ik solver:
-        # kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
-        # kinematics_solver_search_resolution: 0.005
-        # kinematics_solver_timeout: 0.005
-        # kinematics_solver_attempts: 3
+### Pick-IK ###
+/**:
+  ros__parameters:
+    robot_description_kinematics:
+      fanuc_m16ib:
+        kinematics_solver: pick_ik/PickIkPlugin
+        kinematics_solver_timeout: 0.05
+        kinematics_solver_attempts: 3
+        mode: global
+        position_scale: 1.0
+        rotation_scale: 0.5
+        position_threshold: 0.001
+        orientation_threshold: 0.01
+        cost_threshold: 0.001
+        minimal_displacement_weight: 0.0
+        gd_step_size: 0.0001
 
-  # epsilon
-  # kinematics_solver_attempts
-  # kinematics_solver_ik_links
-  # kinematics_solver_search_resolution
-  # kinematics_solver_timeout
-  # position_only_ik
-  # solve_type

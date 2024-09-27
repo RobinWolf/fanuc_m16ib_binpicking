@@ -82,6 +82,11 @@ RUN pip install numpy==1.23.5
 USER $USER
 
 
+#pick-ik setup
+USER root
+RUN apt-get update && apt-get install -y ros-${ROS_DISTRO}-pick-ik
+USER $USER
+
 
 # Copy src into src folder to build the workspace initially --> mounting overwrites this
 COPY ./src /home/$USER/ros2_ws/src
