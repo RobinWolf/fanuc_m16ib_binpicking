@@ -31,5 +31,7 @@ docker run \
   --net=host \
   -e DISPLAY="$DISPLAY" \
   -v "$SRC_HOST":"$SRC_CONTAINER":rw \
+  --gpus 'all,"capabilities=compute,utility,graphics"' \
+  --runtime nvidia \
   fanuc_m16ib_description/"$ROS_DISTRO"
 

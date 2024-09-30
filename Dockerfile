@@ -93,7 +93,8 @@ USER root
 RUN mkdir -p /home/$USER/zivid
 WORKDIR /home/$USER/zivid
 
-RUN apt-get update && apt-get install -y wget
+RUN apt-get update && apt-get install -y wget \
+    g++
 
 RUN wget \
 https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid_2.13.1+18e79e79-1_arm64.deb \
@@ -101,6 +102,9 @@ https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-studi
 https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-tools_2.13.1+18e79e79-1_arm64.deb \
 https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-genicam_2.13.1+18e79e79-1_arm64.deb
 RUN apt-get update && apt-get install ./*.deb -y
+
+    #recommendet for CUDA permissions of the user "NvRmMemInitNvmap failed with Permission denied"
+RUN usermod -aG sudo,video "$USER" 
 
 WORKDIR /home/$USER/ros2_ws
 USER $USER

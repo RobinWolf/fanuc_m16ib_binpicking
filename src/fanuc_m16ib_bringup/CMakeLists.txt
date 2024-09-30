@@ -28,6 +28,7 @@ endif()
 install(DIRECTORY
   rviz
   launch
+  zivid
   DESTINATION share/${PROJECT_NAME}/
 )
 
