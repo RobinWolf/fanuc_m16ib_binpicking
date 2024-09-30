@@ -88,6 +88,23 @@ RUN apt-get update && apt-get install -y ros-${ROS_DISTRO}-pick-ik
 USER $USER
 
 
+#zivid setup
+USER root
+RUN mkdir -p /home/$USER/zivid
+WORKDIR /home/$USER/zivid
+
+RUN apt-get update && apt-get install -y wget
+
+RUN wget \
+https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid_2.13.1+18e79e79-1_arm64.deb \
+https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-studio_2.13.1+18e79e79-1_arm64.deb \
+https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-tools_2.13.1+18e79e79-1_arm64.deb \
+https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-genicam_2.13.1+18e79e79-1_arm64.deb
+RUN apt-get update && apt-get install ./*.deb -y
+
+WORKDIR /home/$USER/ros2_ws
+USER $USER
+
 # Copy src into src folder to build the workspace initially --> mounting overwrites this
 COPY ./src /home/$USER/ros2_ws/src
 
