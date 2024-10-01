@@ -15,7 +15,7 @@ docker build \
   --build-arg UID="$uid" \
   --build-arg GID="$gid" \
   -f Dockerfile \
-  -t fanuc_m16ib_description/"$ROS_DISTRO" .
+  -t fanuc_m16ib_binpicking/"$ROS_DISTRO" .
 
 ##############################################################################
 ##                            Run the container                             ##
@@ -33,5 +33,5 @@ docker run \
   -v "$SRC_HOST":"$SRC_CONTAINER":rw \
   --gpus 'all,"capabilities=compute,utility,graphics"' \
   --runtime nvidia \
-  fanuc_m16ib_description/"$ROS_DISTRO"
+  fanuc_m16ib_binpicking/"$ROS_DISTRO"
 

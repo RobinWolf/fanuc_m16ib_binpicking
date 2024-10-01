@@ -96,6 +96,8 @@ WORKDIR /home/$USER/zivid
 RUN apt-get update && apt-get install -y wget \
     g++
 
+RUN pip install ros2-numpy
+
 RUN wget \
 https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid_2.13.1+18e79e79-1_arm64.deb \
 https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-studio_2.13.1+18e79e79-1_arm64.deb \
@@ -103,8 +105,11 @@ https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-tools
 https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-genicam_2.13.1+18e79e79-1_arm64.deb
 RUN apt-get update && apt-get install ./*.deb -y
 
-    #recommendet for CUDA permissions of the user "NvRmMemInitNvmap failed with Permission denied"
+    #recommendet for CUDA permissions of the user "NvRmMemInitNvmap failed with Permission denied" -----------------------> relocate to the user config!
 RUN usermod -aG sudo,video "$USER" 
+
+RUN pip install pip==24.2
+RUN pip install zivid==2.13.1.2.13.1
 
 WORKDIR /home/$USER/ros2_ws
 USER $USER

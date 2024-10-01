@@ -14,7 +14,7 @@ def generate_launch_description():
     description_package = "fanuc_m16ib_description"
 
     declared_arguments = []
-    # agv launch arguments
+    # robot launch arguments
     declared_arguments.append(
         DeclareLaunchArgument(
             "tf_prefix",
