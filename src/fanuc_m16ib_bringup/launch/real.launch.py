@@ -65,7 +65,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "zivid_settings",
-            default_value='settings_309024.yml',
+            default_value='settings_new_11122023.yml',
             description="set the path to the yaml with camera settings, zivid default: src/zivid-ros/zivid_samples/settings/camera_settings.yml",
         )
     )#settings_309024 settings_new_11122023
@@ -113,7 +113,8 @@ def generate_launch_description():
     zivid_node = Node(
         package="zivid_camera",
         executable="zivid_camera",
-        parameters=[{"settings_file_path":zivid_config_file}],
+        parameters=[{"settings_file_path":zivid_config_file},
+                    {"frame_id":"world"}],
         condition=IfCondition(launch_zivid)
         )
 
@@ -142,8 +143,8 @@ def generate_launch_description():
 
 
     nodes_to_start = [
-        #load_controllers,
-        #load_moveit,
+        load_controllers,
+        load_moveit,
         rviz_node,
         zivid_node
     ]
