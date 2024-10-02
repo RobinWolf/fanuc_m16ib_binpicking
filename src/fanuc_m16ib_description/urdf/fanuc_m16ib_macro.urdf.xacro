@@ -48,19 +48,20 @@
     <joint name="${tf_prefix}robotarm_to_parent" type="fixed">
         <parent link="${parent}"/>
         <child link="${tf_prefix}base_link"/>
+        <xacro:insert_block name="origin"/>
     </joint>
 
     <!-- Link0 = Base -->
     <link name="${tf_prefix}base_link">
-      <origin xyz="0 0 0"/>
       <visual>
+        <origin rpy="0 0 -1.5707"/>
         <geometry>
           <mesh filename="package://fanuc_m16ib_description/meshes/visual/base.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="${tf_prefix}grey"/>
       </visual>
       <collision>
-        <origin xyz="0 0 0"/>
+        <origin xyz="0 0 -1.5707"/>
         <geometry>
           <mesh filename="package://fanuc_m16ib_description/meshes/collision/base.stl" scale="0.001 0.001 0.001"/>
         </geometry>
@@ -70,7 +71,7 @@
 
     <!-- Joint 1 -->
     <joint name="${tf_prefix}joint1" type="revolute">
-        <origin xyz="0 0 0.245" rpy="0 0 0"/> 
+        <origin xyz="0 0 0.245" rpy="0 0 -1.5707"/> 
         <parent link="${tf_prefix}base_link"/>
         <child link="${tf_prefix}link_1"/>
         <axis xyz="0.0 0.0 1.0"/>
@@ -243,15 +244,15 @@
       </collision>
     </link>
 
-        <!-- Joint to Tool0/ Flange -->
-        <joint name="${tf_prefix}to_tool0" type="fixed">
-          <origin xyz="0 0 0.0196" rpy="0 0 0"/> 
-          <parent link="${tf_prefix}link_6"/>
-          <child link="${tf_prefix}tool0"/>
-      </joint>
+    <!-- Joint to Tool0/ Flange -->
+    <joint name="${tf_prefix}to_tool0" type="fixed">
+      <origin xyz="0 0 0.0196" rpy="0 0 0"/> 
+      <parent link="${tf_prefix}link_6"/>
+      <child link="${tf_prefix}tool0"/>
+    </joint>
   
-      <!-- tool0 -->
-      <link name="${tf_prefix}tool0"/>
+    <!-- tool0 -->
+    <link name="${tf_prefix}tool0"/>
  
   
   </xacro:macro>

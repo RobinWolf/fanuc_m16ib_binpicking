@@ -2,7 +2,7 @@
 
 #NOTE: can be adapted when integrating this package into a whole scene
 
-joint1: 0
+joint1: 1.5707
 joint2: 0
 joint3: 0
 joint4: 0

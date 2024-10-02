@@ -34,7 +34,6 @@ def generate_launch_description():
     launch_rviz = LaunchConfiguration('launch_rviz')
 
 
-    #launch the hardware controllers (currently only mock hardware supported) --> control_node, robot_state_pub_node, joint_state_broadcaster_node, joint_trajectory_controller_node
     test_scene_path = PathJoinSubstitution([FindPackageShare(zivid_sim_package), "zivid", test_scene])
     camera_node = Node(
         package="zivid_simulation",

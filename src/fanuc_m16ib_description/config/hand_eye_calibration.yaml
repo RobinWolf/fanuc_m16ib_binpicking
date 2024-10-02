@@ -1,0 +1,12 @@
+# This File contains the transformation between the robot base frame and the camera frame
+# Called hand-eye calibration or extrinsic calibration
+
+# xyz are the translation to the camera origin relative to the robots base
+# rpy are euler angles (xyz) convention
+
+x: 0.1988
+y: 1.155
+z: 1.367
+r: -2.9328
+p: -0.2218
+j: 3.1243
