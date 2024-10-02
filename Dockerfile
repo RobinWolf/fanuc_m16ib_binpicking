@@ -96,8 +96,6 @@ WORKDIR /home/$USER/zivid
 RUN apt-get update && apt-get install -y wget \
     g++
 
-RUN pip install ros2-numpy
-
 RUN wget \
 https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid_2.13.1+18e79e79-1_arm64.deb \
 https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-studio_2.13.1+18e79e79-1_arm64.deb \

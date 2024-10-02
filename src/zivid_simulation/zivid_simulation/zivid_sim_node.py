@@ -7,6 +7,7 @@ import zivid
 import ros2_numpy as rnp
 import array
 import sys
+import pyarrow as pa
 
 from sensor_msgs.msg import PointCloud2, PointField, Image
 from std_srvs.srv import Trigger
@@ -38,9 +39,6 @@ class GetMockZividFrame(Node):
 
             # Extract xyz, rgb, and normals
             points = point_cloud.copy_data("xyzrgba") # structured array
-            #points = np.nan_to_num(xyzrgba_)  # Handle NaN values 
-
-            print('Size of the Point Cloud (bytes)', sys.getsizeof(points))
 
             rgb = point_cloud.copy_data("bgra")[:, :, :3]  # Extract RGB channels
 
@@ -75,13 +73,14 @@ class GetMockZividFrame(Node):
         msg.point_step = 16
         msg.row_step = msg.point_step * msg.width
 
+        # convert mm (zivid) to m (ros)
         points['x'] = points['x'] / 1000
         points['y'] = points['y'] / 1000
         points['z'] = points['z'] / 1000
 
-        print("points:", points[1000,1000])
 
-        msg.data = points.tobytes()
+        msg._data = points.tobytes()    # assign to the private member _data instead of data for speed
+
 
         # Publish the message
         self.pointcloud_publisher.publish(msg)
