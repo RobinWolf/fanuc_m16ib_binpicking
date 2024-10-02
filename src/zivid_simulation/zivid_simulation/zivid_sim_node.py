@@ -39,11 +39,7 @@ class GetMockZividFrame(Node):
         with zivid.Application() as app:
             frame = zivid.Frame(self.simScanPath)
             point_cloud = frame.point_cloud()
-<<<<<<< HEAD
-            point_cloud = self.HandEyeCalibration(point_cloud)
-=======
-            point_cloud = self.HandEyeCalibration(point_cloud)
->>>>>>> 446dbc08d898e25719553e1a6daba449f6adeb0a
+            #point_cloud = self.HandEyeCalibration(point_cloud)
 
             # Extract xyz, rgb, and normals
             points = point_cloud.copy_data("xyzrgba") # structured array
@@ -51,8 +47,7 @@ class GetMockZividFrame(Node):
             rgb = point_cloud.copy_data("bgra")[:, :, :3]  # Extract RGB channels
 
             # Publish PointCloud2
-            #self.publish_pointcloud(points,'zivid_optical_frame')
-            self.publish_pointcloud(points,'fanuc_m16ib_base_link')
+            self.publish_pointcloud(points,'zivid_optical_frame')
 
             # Publish RGB image
             self.publish_image(rgb)
