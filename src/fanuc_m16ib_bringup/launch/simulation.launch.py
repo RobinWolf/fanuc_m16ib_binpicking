@@ -12,6 +12,8 @@ def generate_launch_description():
     bringup_package = "fanuc_m16ib_bringup"
     control_package = "fanuc_m16ib_control"
     description_package = "fanuc_m16ib_description"
+    zivid_sim_package = "zivid_simulation"
+
 
     declared_arguments = []
     # robot launch arguments
@@ -37,6 +39,15 @@ def generate_launch_description():
         )
     )
 
+    # camera arguments
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "test_scene",
+            default_value='scan2.zdf',
+            description="choose the test scene which the mock hardware should use. the data must be located in the 'data' folder !",
+        )
+    )
+
 
     # general arguments
     declared_arguments.append(
@@ -56,12 +67,15 @@ def generate_launch_description():
 
 
 
+
     #init launch arguments, transfer to variables
     tf_prefix = LaunchConfiguration("tf_prefix")
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     generate_ros2_control_tag = LaunchConfiguration('generate_ros2_control_tag') 
     launch_moveit = LaunchConfiguration('launch_moveit')
     launch_rviz = LaunchConfiguration('launch_rviz')
+    test_scene = LaunchConfiguration("test_scene")
+
 
 
 
@@ -89,10 +103,18 @@ def generate_launch_description():
             }.items(),
     )
 
+    # launch zivid simulation node
+    test_scene_path = PathJoinSubstitution([FindPackageShare(zivid_sim_package), "zivid", test_scene])
+    camera_node = Node(
+        package="zivid_simulation",
+        executable="zivid_sim_node",
+        parameters=[{"simScanPath":test_scene_path}],
+        )
+
 
 
     # launch whole rviz node with stored config and motion planning parameters
-    rviz_config_file = PathJoinSubstitution([FindPackageShare(bringup_package), "rviz", "moveit.rviz"])
+    rviz_config_file = PathJoinSubstitution([FindPackageShare(bringup_package), "rviz", "moveit_and_zivid.rviz"])
     robot_description_kinematics_file = PathJoinSubstitution(   # needed for the interactive markers in rviz
         [
             FindPackageShare(moveit_package),
@@ -117,7 +139,8 @@ def generate_launch_description():
     nodes_to_start = [
         load_controllers,
         load_moveit,
-        rviz_node
+        rviz_node,
+        camera_node
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start) 

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="zivid_camera" params="
+        hand_eye
+        parent"
+        >
+
+        <!-- camera link with hand eye calibration (invert homogenous of zivid sdk) -> should be passed as parameter from the launch file -->
+        <link name="zivid_optical_frame"/>
+
+        <joint name="hand_eye" type="fixed">
+            <origin xyz="${hand_eye['x']} ${hand_eye['y']} ${hand_eye['z']}" rpy= "${hand_eye['r']} ${hand_eye['p']} ${hand_eye['j']}" />
+            <parent link="${parent}"/>
+            <child link="zivid_optical_frame"/>
+        </joint>
+
+        <!-- <origin xyz="0.1988 1.155 1.367" rpy= "-2.9328 -0.2218 3.1243"/>  -->
+
+    </xacro:macro>
+</robot>

@@ -6,9 +6,10 @@
     <xacro:arg name="name" default="fanuc_m16ib"/>
 
 <!--#######################################################################################################################################-->
-   <!-- import main macro -->
+   <!-- import macros -->
 <!--#######################################################################################################################################-->
     <xacro:include filename="$(find fanuc_m16ib_description)/urdf/fanuc_m16ib_macro.urdf.xacro"/>
+    <xacro:include filename="$(find fanuc_m16ib_description)/urdf/zivid.urdf.xacro"/>
 
 
 <!--#######################################################################################################################################-->
@@ -28,6 +29,10 @@
     <xacro:arg name="initial_positions_file" default="$(find fanuc_m16ib_description)/config/initial_positions.yaml"/>
     <xacro:property name="initial_positions_file" default="$(arg initial_positions_file)"/>
 
+    <!-- hand eye calibration -->
+    <xacro:arg name="hand_eye_file" default="$(find fanuc_m16ib_description)/config/hand_eye_calibration.yaml"/>
+    <xacro:property name="hand_eye_file" default="$(arg hand_eye_file)"/>
+
 
 <!--#######################################################################################################################################-->
    <!-- call the main macro by passing parameters to build the arm -->
@@ -45,6 +50,16 @@
         >
         <origin xyz="0 0 0" rpy="0 0 0" />          <!-- position robot in the world -->
     </xacro:fanuc_m16ib>
+
+    <!-- add camera link with calibrated pose -->
+    <xacro:zivid_camera
+        parent="$(arg tf_prefix)base_link"
+        hand_eye ="${xacro.load_yaml(hand_eye_file)}"
+        >
+    </xacro:zivid_camera>
+
+
+
 
 
 </robot>
