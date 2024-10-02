@@ -1,0 +1,21 @@
+sensors:  ["camera"]
+camera:
+    sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+    point_cloud_topic: /points/xyzrgba
+    max_range: 1.0
+    padding_offset: 0.1
+    padding_scale: 1.0
+    point_subsample: 1
+    max_update_rate: 20.0
+    filtered_cloud_topic: /points/occupied_cloud
+
+# This YAML configuration file holds the default values used for configuring 3D sensors.
+# The name of this file shouldn't be changed, or else the Setup Assistant won't detect it.
+# Values may not be ideal defaults, original source unclear.
+
+# needed ROS Package to use Octomap Sensor Plugins: moveit-ros-perception 
+
+# octomap middleware sourcecode:
+# https://moveit.picknik.ai/main/api/html/occupancy__map__monitor__middleware__handle_8cpp_source.html
+# https://moveit.picknik.ai/main/api/html/occupancy__map__monitor_8cpp_source.html
+# https://moveit.picknik.ai/main/api/html/pointcloud__octomap__updater_8cpp_source.html

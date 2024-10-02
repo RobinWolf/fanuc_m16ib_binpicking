@@ -18,7 +18,7 @@
 
     <!-- default configurations -->
     <group_state name="home" group="${name}">
-        <joint name="$(arg tf_prefix)joint1" value="0"/>
+        <joint name="$(arg tf_prefix)joint1" value="1.5707"/>
         <joint name="$(arg tf_prefix)joint2" value="0"/>
         <joint name="$(arg tf_prefix)joint3" value="0"/>
         <joint name="$(arg tf_prefix)joint4" value="0"/>
