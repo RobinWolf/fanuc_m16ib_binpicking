@@ -39,11 +39,7 @@ class GetMockZividFrame(Node):
         with zivid.Application() as app:
             frame = zivid.Frame(self.simScanPath)
             point_cloud = frame.point_cloud()
-<<<<<<< HEAD
-            point_cloud = self.HandEyeCalibration(point_cloud)
-=======
-            point_cloud = self.HandEyeCalibration(point_cloud)
->>>>>>> 446dbc08d898e25719553e1a6daba449f6adeb0a
+            #point_cloud = self.HandEyeCalibration(point_cloud)
 
             # Extract xyz, rgb, and normals
             points = point_cloud.copy_data("xyzrgba") # structured array
