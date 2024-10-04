@@ -1,7 +1,6 @@
 ##ROS
 import rclpy
 from rclpy.node import Node
-from std_srvs.srv import Trigger
 from sensor_msgs.msg import Image
 from std_msgs.msg import Header
 from visionai_ros_interfaces.srv import GetAiInference  # import the custom interface
@@ -28,7 +27,7 @@ class DetectronSegmentation(Node):
         super().__init__('visionai_segmentation')    # create a node
 
         # topics and services
-        self.srv = self.create_service(Trigger, 'ai_inference', self.ai_inference_callback)
+        self.srv = self.create_service(GetAiInference, 'ai_inference', self.ai_inference_callback)
         self.color_subscriber = self.create_subscription(Image, '/color/image_color', self.color_subscriber_callback, 10)
         self.depth_subscriber = self.create_subscription(Image, '/depth/image_depth', self.depth_subscriber_callback, 10)
         self.mask_publisher = self.create_publisher(Image, '/color/mask', 10)
@@ -76,6 +75,13 @@ class DetectronSegmentation(Node):
     
 
     def color_subscriber_callback(self, msg):
+        '''
+        msg: image message on topic /color/image_color
+        
+        return
+        ------
+        None
+        '''
         # get image from topic anc convert to cv2
         try:
             # Convert ROS Image message to OpenCV image
@@ -89,7 +95,15 @@ class DetectronSegmentation(Node):
             self.get_logger().error(f"Error converting color image: {e}")
         return
 
+
     def depth_subscriber_callback(self, msg):
+        '''
+        msg: image message on topic /depth/image_depth
+        
+        return
+        ------
+        None
+        '''
         # get image from topic anc convert to cv2
         try:
             # Convert ROS Image message to OpenCV image
@@ -105,18 +119,26 @@ class DetectronSegmentation(Node):
     
 
     def convertStructToMsg(self, aiPick_struct, response):
+        '''
+        AI_Base aiPick_struct: custom struct holding contents of the instance to pick
+        GetAiInference.srv response: response interface of the service
+        
+        return
+        ------
+        GetAiInference.srv response: response interface of the service
+
+        '''
 
         # writes response message of GetAiInference service
         if aiPick_struct.score != None:
             response.success = True
-            response.mask_pick = aiPick_struct.mask
+            response.pick_mask = aiPick_struct.mask
             response.pick_class = aiPick_struct.pred_class
             response.pick_score = aiPick_struct.score
         else:
             response.success = False
 
             self.get_logger().error(f"AiInference Callback executed")
-
         return response
 
 
@@ -226,8 +248,31 @@ class DetectronSegmentation(Node):
 
         return aiPick_struct
     
+    
+    def PlotOverlay(self, img, mask):
+        '''
+        mat img: source image
+        mat mask: overlay mask
+        
+        return
+        ------
+        None
+        '''
+        mask_color = np.array([255,0,1,0.5])
+        overlay_image = np.copy(img)
+        overlay_image[mask] = (1 - mask_color[3]) * overlay_image[mask] + mask_color[3]*mask_color[:3]         
+        self.publish_image(overlay_image)                                                                                                                      
+        return
+    
 
     def publish_image(self, rgb):
+        '''
+        mat rgb: image to publish on on topic /color/mask
+        
+        return
+        ------
+        None
+        '''
         # Prepare Image message
         header = Header()
         header.stamp = self.get_clock().now().to_msg()
@@ -243,15 +288,6 @@ class DetectronSegmentation(Node):
         img_msg.step = 3 * rgb.shape[1]
         img_msg.data = rgb.tobytes()  # Convert the RGB data to a byte array
 
-        self.image_publisher.publish(img_msg)
+        self.mask_publisher.publish(img_msg)
         self.get_logger().info('RGB image with mask published')
-
-
-
-    def PlotOverlay(self, img, mask):
-        mask_color = np.array([255,0,1,0.5])
-        overlay_image = np.copy(img)
-        overlay_image[mask] = (1 - mask_color[3]) * overlay_image[mask] + mask_color[3]*mask_color[:3]         
-        self.publish_image(overlay_image)                                                                                                                      
-
         return

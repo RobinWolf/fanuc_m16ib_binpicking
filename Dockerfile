@@ -8,6 +8,7 @@ ARG ROS_DISTRO=humble
 
 # ARM64 Hardware
 FROM arm64v8/ros:$ROS_DISTRO AS base
+#FROM dustynv/ros:humble-desktop-l4t-r35.2.1 AS base
 
 # Configure DDS
 COPY dds_profile.xml /opt/misc/dds_profile.xml
@@ -20,6 +21,7 @@ ARG GID=1000
 ENV USER=$USER
 RUN groupadd -g $GID $USER \
     && useradd -m -u $UID -g $GID --shell $(which bash) $USER
+RUN usermod -aG sudo,video "$USER" 
 
 # Setup workpace
 USER $USER
@@ -33,7 +35,7 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-xacro \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     ros-${ROS_DISTRO}-rviz2
-USER ${USER}
+USER $USER
 
 
 # install necessary packages for ros2 control
@@ -103,8 +105,6 @@ https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-tools
 https://downloads.zivid.com/sdk/releases/2.13.1+18e79e79-1/u20/arm64/zivid-genicam_2.13.1+18e79e79-1_arm64.deb
 RUN apt-get update && apt-get install ./*.deb -y
 
-    #recommendet for CUDA permissions of the user "NvRmMemInitNvmap failed with Permission denied" -----------------------> relocate to the user config!
-RUN usermod -aG sudo,video "$USER" 
 
 RUN pip install pip==24.2
 RUN pip install zivid==2.13.1.2.13.1
@@ -113,13 +113,34 @@ WORKDIR /home/$USER/ros2_ws
 USER $USER
 
 # Vision Python Dependencies Setup
+USER root
 RUN pip install opencv-python
+RUN pip install open3d==0.17.0 
+USER $USER
 
 # Vision ROS Dependencies Setup
+USER root
 RUN apt-get update && apt-get install --no-install-recommends -y \
     ros-$ROS_DISTRO-cv-bridge \
     ros-$ROS_DISTRO-tf-transformations
+USER $USER
 
+
+# # Detectron
+# USER root
+# RUN mkdir -p /home/$USER/detectron
+# WORKDIR /home/$USER/detectron
+
+# RUN apt-get update && apt-get install -y libopenblas-dev
+# ENV TORCH_INSTALL=https://developer.download.nvidia.cn/compute/redist/jp/v511/pytorch/torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl
+# RUN pip install --no-cache $TORCH_INSTALL
+
+# RUN apt-get update && apt-get install -y --no-install-recommends git
+# RUN git clone https://github.com/facebookresearch/detectron2.git
+# RUN pip install -e detectron2
+
+# WORKDIR /home/$USER/ros2_ws
+# USER $USER
 
 
 

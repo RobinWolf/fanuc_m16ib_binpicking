@@ -3,4 +3,5 @@
 # Response
 bool success
 float64 pick_score
-int64[] pick_idxs
+int64 pick_class
+int64[] pick_mask

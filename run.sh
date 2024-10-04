@@ -25,7 +25,7 @@ SRC_HOST="$(pwd)"/src
 docker run \
 
 docker run \
-  --name fanuc_m16ib_description \
+  --name fanuc_m16ib_binpicking \
   --rm \
   -it \
   --net=host \
@@ -33,5 +33,6 @@ docker run \
   -v "$SRC_HOST":"$SRC_CONTAINER":rw \
   --gpus 'all,"capabilities=compute,utility,graphics"' \
   --runtime nvidia \
+  --env-file .env\
   fanuc_m16ib_binpicking/"$ROS_DISTRO"
 

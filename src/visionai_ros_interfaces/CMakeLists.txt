@@ -10,6 +10,7 @@ find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 find_package(rosidl_default_generators REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -26,7 +27,9 @@ endif()
 # generate custom camera service interface
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/GetAiInference.srv"
-  DEPENDENCIES sensor_msgs
+  "srv/GetObjectPose.srv"
+  "srv/PublishCollisionGeometry.srv"
+  DEPENDENCIES sensor_msgs geometry_msgs
 )
 
 ament_package()

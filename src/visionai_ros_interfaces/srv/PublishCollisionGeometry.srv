@@ -1,0 +1,5 @@
+# Request
+int64[] pick_mask
+---
+# Response
+bool success
