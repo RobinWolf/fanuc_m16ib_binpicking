@@ -106,7 +106,12 @@ USER root
 RUN sed -i 's|exec "\$@"|source "/home/'"${USER}"'/ros2_ws/install/setup.bash"\n&|' /ros_entrypoint.sh
 USER $USER
 
-CMD ["/bin/bash"]
+# Append the ROS 2 source command to .bashrc and build
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+RUN /bin/bash -c "source /opt/ros/humble/setup.bash"
+
+CMD ["bash"]
+
 
 
 
