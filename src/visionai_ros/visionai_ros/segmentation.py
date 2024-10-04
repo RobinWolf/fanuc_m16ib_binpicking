@@ -3,7 +3,8 @@ import rclpy
 from rclpy.node import Node
 from std_srvs.srv import Trigger
 from sensor_msgs.msg import Image
-
+from std_msgs.msg import Header
+from visionai_ros_interfaces.srv import GetAiInference  # import the custom interface
 
 ##Python/ Vision
 from detectron2.config import get_cfg
@@ -43,7 +44,6 @@ class DetectronSegmentation(Node):
         self._area = params._area
         self._probability = params._probability
         self._visMask = params._visMask
-        self._exportJSON = params._exportJSON
         self._pickInstanceJsonPath = params._pickInstanceJsonPath
 
         self.get_logger().info("parameters loaded from params.py")
@@ -60,19 +60,20 @@ class DetectronSegmentation(Node):
 
 
 
-
+    @timeit_decorator
     def ai_inference_callback(self, request, response):
         # execute inference and set response message
 
         # detectron2 inference (instance segmentation)
-        aiOut_struct = self.ai.detectron2_inference(self.color_img)
+        aiOut_struct = self.detectron2_inference(self.color_img)
 
         # filter detected instances for best to pick (ROI)
-        aiPick_struct = self.ai.filterPick(aiOut_struct=aiOut_struct)
+        aiPick_struct = self.filterPick(self.color_img, aiOut_struct)
 
         # transform aiPick_struct to response message and topic messages
-        self.convertStructToMsg()
-        return
+        responsemsg = self.convertStructToMsg(aiPick_struct, response)
+        return responsemsg
+    
 
     def color_subscriber_callback(self, msg):
         # get image from topic anc convert to cv2
@@ -102,18 +103,23 @@ class DetectronSegmentation(Node):
             self.get_logger().error(f"Error converting depth image: {e}")
         return
     
-    def convertStructToMsg(self, ):
 
-        # TODO 
-        
-        return
+    def convertStructToMsg(self, aiPick_struct, response):
+
+        # writes response message of GetAiInference service
+        if aiPick_struct.score != None:
+            response.success = True
+            response.mask_pick = aiPick_struct.mask
+            response.pick_class = aiPick_struct.pred_class
+            response.pick_score = aiPick_struct.score
+        else:
+            response.success = False
+
+            self.get_logger().error(f"AiInference Callback executed")
+
+        return response
 
 
-
-
-
-
-    @timeit_decorator
     def detectron2_inference(self, im):
         '''
         mat im: color image to pass trough the model
@@ -174,7 +180,7 @@ class DetectronSegmentation(Node):
         return aiOut_struct
     
 
-    def filterPick(self, aiOut_struct):
+    def filterPick(self, im, aiOut_struct):
         '''
         AI_Base aiOut_struct: custom struct holding contents of all instances (lists)
 
@@ -185,7 +191,6 @@ class DetectronSegmentation(Node):
         '''
         
         # load and prepare rgb image
-        im = cv2.imread(self._ImagePath)
         im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
 
         # init with defaults
@@ -217,70 +222,36 @@ class DetectronSegmentation(Node):
         ## OPTIONAL ##
         # Visualise the output mask over the image
         if self._visMask:
-            self.PlotOverlay(im, mask_pick, str=f'cls')
-
-        # export the propeties of picked instance to a json file
-        if self._exportJSON:
-            self.exportJSON(aiPick_struct)
+            self.PlotOverlay(im, mask_pick)
 
         return aiPick_struct
     
 
+    def publish_image(self, rgb):
+        # Prepare Image message
+        header = Header()
+        header.stamp = self.get_clock().now().to_msg()
+        header.frame_id = 'zivid_optical_frame'
 
-    def exportJSON(self, aiPick_struct):
-        '''
-        AI_Base aiPick_struct: custom struct holding contents of the instance to pick
+        # Create an Image message
+        img_msg = Image()
+        img_msg.header = header
+        img_msg.height = rgb.shape[0]
+        img_msg.width = rgb.shape[1]
+        img_msg.encoding = 'bgr8'
+        img_msg.is_bigendian = False
+        img_msg.step = 3 * rgb.shape[1]
+        img_msg.data = rgb.tobytes()  # Convert the RGB data to a byte array
 
-        return
-        ------
-        None
-        '''
-
-        ai_dict = {
-            "score": str(aiPick_struct.score),
-            "pred_class": str(aiPick_struct.pred_class),
-            "mask": (aiPick_struct.mask.tolist()),
-            "bbox": str(aiPick_struct.bbox)
-            }
-
-        with open(self._pickInstanceJsonPath, "w") as json_file:
-            json.dump(ai_dict, json_file, indent=4)
-
-        return None
+        self.image_publisher.publish(img_msg)
+        self.get_logger().info('RGB image with mask published')
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def PlotOverlay(self, img, mask, str=None):
+    def PlotOverlay(self, img, mask):
         mask_color = np.array([255,0,1,0.5])
         overlay_image = np.copy(img)
-        overlay_image[mask] = (1 - mask_color[3]) * overlay_image[mask] + mask_color[3]*mask_color[:3]                                                                                                                               
-        plt.imshow(overlay_image)
-        if str == None:
-            plt.title('Overlay Image')
-        else:
-            plt.title(str)
-        plt.show()
+        overlay_image[mask] = (1 - mask_color[3]) * overlay_image[mask] + mask_color[3]*mask_color[:3]         
+        self.publish_image(overlay_image)                                                                                                                      
+
         return

@@ -1,0 +1,6 @@
+# Request - none for this service
+---
+# Response
+bool success
+float64 pick_score
+int64[] pick_idxs

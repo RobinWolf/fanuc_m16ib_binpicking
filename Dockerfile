@@ -112,6 +112,21 @@ RUN pip install zivid==2.13.1.2.13.1
 WORKDIR /home/$USER/ros2_ws
 USER $USER
 
+# Vision Python Dependencies Setup
+RUN pip install opencv-python
+
+# Vision ROS Dependencies Setup
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    ros-$ROS_DISTRO-cv-bridge \
+    ros-$ROS_DISTRO-tf-transformations
+
+
+
+
+
+
+
+
 # Copy src into src folder to build the workspace initially --> mounting overwrites this
 COPY ./src /home/$USER/ros2_ws/src
 
