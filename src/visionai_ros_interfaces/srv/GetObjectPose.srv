@@ -1,7 +1,0 @@
-# Request
-int64 pick_class
-int64[] pick_mask
----
-# Response
-bool success
-geometry_msgs/PoseStamped pose

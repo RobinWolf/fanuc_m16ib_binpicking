@@ -1,2 +1,0 @@
-# Bash does not play well with Windows line endings.
-**.sh text eol=lf
